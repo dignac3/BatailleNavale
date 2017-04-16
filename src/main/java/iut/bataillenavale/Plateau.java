@@ -18,7 +18,7 @@ public class Plateau {
 		cases = new Case[cote][cote];
 		for (int i = 0; i < cases.length; i++) {
 			for (int j = 0; j < cases.length; j++) {
-				cases[i][j] = new Case(i,j);
+				cases[i][j] = new Case();
 				
 				
 			}
@@ -27,22 +27,19 @@ public class Plateau {
 	
 	}
 
+	@Override
+	public String toString() {
+		return "Plateau [cote=" + cote + ", cases=" + Arrays.toString(cases) + "]";
+	}
+
 	public int getCote() {
 		return cote;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		
-		for (int i = 0; i < cases.length; i++) {
-			"c"+cases
+	
+	public void tir (int x, int y){
+		if (!cases[x][y].getEstTouche()) {
+			cases[x][y].setEstTouche(true);
 		}
-		return "Plateau [cote=" + cote + ", cases=" + Arrays.toString(cases) + "]";
 	}
-	
-	
 }
 
