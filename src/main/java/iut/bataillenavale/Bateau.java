@@ -8,16 +8,14 @@ package iut.bataillenavale;
  *
  */
 public class Bateau {
-	private int x;
-	private int y;
 	private final int longueur;
 	private boolean estCoule;
+	private int vie ;
 	
-	public Bateau(int x, int y, int longueur){
+	public Bateau(int longueur){
 		this.longueur=longueur;
-		this.x = x;
-		this.y = y;
-		estCoule = false;
+		this.setVie(longueur);
+		setEstCoule(false);
 	}
 
 	/**
@@ -28,30 +26,34 @@ public class Bateau {
 	}
 
 	/**
-	 * @return the x
+	 * @return the vie
 	 */
-	public int getX() {
-		return x;
+	public int getVie() {
+		return vie;
 	}
 
 	/**
-	 * @param x the x to set
+	 * @param vie the vie to set
 	 */
-	public void setX(int x) {
-		this.x = x;
+	public void setVie(int vie) {
+		this.vie = vie;
+	}
+	
+	public void perteVie(int vie){
+		this.vie = vie-1;
 	}
 
 	/**
-	 * @return the y
+	 * @return the estCoule
 	 */
-	public int getY() {
-		return y;
+	public boolean isEstCoule() {
+		return estCoule;
 	}
 
 	/**
-	 * @param y the y to set
+	 * @param estCoule the estCoule to set
 	 */
-	public void setY(int y) {
-		this.y = y;
+	public void setEstCoule(boolean estCoule) {
+		this.estCoule = estCoule;
 	}
 }
