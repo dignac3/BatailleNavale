@@ -9,20 +9,20 @@ package iut.bataillenavale;
  */
 public class Plateau {
 	private final int cote;
-	private final int nbBateaux;
+	private final int nb_bateaux;
 	private final Case[][] cases;
 	private final Bateau[] bateaux;
 	private final String nom;
 	private int score;
 	
-	public Plateau(String nom ,int cote,int nbBateaux, int[] longueurs){
+	public Plateau(String nom ,int cote,int nb_bateaux, int[] longueurs){
 		this.nom = nom;
 		this.setScore(0);
 		this.cote=cote;
-		this.nbBateaux = nbBateaux;
-		bateaux = new Bateau[nbBateaux];
+		this.nb_bateaux = nb_bateaux;
+		bateaux = new Bateau[nb_bateaux];
 		cases = new Case[cote][cote];
-		for (int i = 0; i < nbBateaux; i++) {
+		for (int i = 0; i < nb_bateaux; i++) {
 			bateaux[i] = new Bateau(longueurs[i]);
 		}
 		for (int i = 0; i < cases.length; i++) {
@@ -110,10 +110,10 @@ public class Plateau {
 	}
 
 	/**
-	 * @return the nbBateaux
+	 * @return the nb_bateaux
 	 */
-	public int getNbBateaux() {
-		return nbBateaux;
+	public int getnb_bateaux() {
+		return nb_bateaux;
 	}
 
 	/**
@@ -153,5 +153,12 @@ public class Plateau {
 	 */
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	/**
+	 * @return the nom
+	 */
+	public String getNom() {
+		return nom;
 	}
 }
