@@ -17,7 +17,7 @@ public class Fenetre extends JFrame {
 		this.setTitle("Bataille Navale");
 		this.setSize(1600, 900);
 		this.setResizable(false);
-		this.setContentPane(new Panel());
+		this.setContentPane(new Panel2());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		this.setVisible(true);
