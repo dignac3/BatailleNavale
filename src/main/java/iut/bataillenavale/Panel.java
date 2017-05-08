@@ -10,8 +10,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -38,11 +38,12 @@ public class Panel extends JPanel {
 	
 	//Variables lancement de partie
 	private int tailleplat = 10;
+	int taille_petitplat;
 	private String nom_j1;
 	private String nom_j2;
 	private int nbbateaux = 0;
 	private ArrayList<Integer> longueursbateaux = new ArrayList<Integer>();
-	private Integer[] longueurs;
+	private int[] longueurs;
 
 	
 	//variables demarrer
@@ -66,9 +67,9 @@ public class Panel extends JPanel {
 	private JButton jb_lancer = new JButton("Lancer la partie !");
 	private JTextField jtf_j1 = new JTextField(15);
 	private JTextField jtf_j2 = new JTextField(15);
-	private JSlider js_tailleplat = new JSlider(5, 30, 10);
-	
-	
+	private JSlider js_tailleplat = new JSlider(5, 15, 10);
+	private Color bleu_trsp = new Color(76,45, 197, 50);
+	private Color bleu = new Color(76,45,197);
 
 	//Panel Demarrer
 	public Panel(){
@@ -78,8 +79,8 @@ public class Panel extends JPanel {
 		
 		//Affichage Bouton
 		jb_demarrer.setFont(new Font(null, 0, 50));
-		jb_demarrer.setBackground(new Color(76,45, 197, 50));
-		jb_demarrer.setForeground(new Color(255, 255, 255));
+		jb_demarrer.setBackground(bleu_trsp);
+		jb_demarrer.setForeground(Color.white);
 		Border border=BorderFactory.createLineBorder(new Color(0), 3, true);
 		jb_demarrer.setBorder(border);
 		this.add(jb_demarrer);
@@ -340,8 +341,11 @@ public class Panel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				longueurs = new Integer[nbbateaux];
-				longueurs = longueursbateaux.toArray(longueurs);
+				longueurs = new int[nbbateaux];
+				for (int i = 0; i < nbbateaux; i++) {
+					longueurs[i] = longueursbateaux.get(i);
+					System.out.println(longueurs[i]);
+				}
 				nom_j1 = jtf_j1.getText();
 				nom_j2 = jtf_j2.getText();
 				if (nom_j1.length() <= 0) {
@@ -353,6 +357,8 @@ public class Panel extends JPanel {
 				else if (nbbateaux <=0) {
 					JOptionPane.showMessageDialog(jp_param, "Vous n'avez pas ajouté de bateau","Pas de bateau",JOptionPane.WARNING_MESSAGE);
 				}else {
+					//Ajout 1 à taille de la grille pour numérotation
+					tailleplat += 1;
 					partie();
 				}
 				//longueurs : ok
@@ -364,10 +370,268 @@ public class Panel extends JPanel {
 		});
 	}
 	
+	
+	
+
+	private JLabel jl_information = new JLabel("Information sur les joueurs :                                                ");
+	private JLabel jl_ligne = new JLabel("_________________________________________________________________________________");
+	private JLabel jl_joueur1 = new JLabel("Joueur 1 : ");
+	private JLabel jl_porteav = new JLabel("  - Nombre de porte-avions : 1 ");
+	private JLabel jl_croiseur = new JLabel("  - Nombre de croiseurs : 1 ");
+	private JLabel jl_destr = new JLabel("  - Nombre de destroyers : 1 ");
+	private JLabel jl_ssmarin = new JLabel("  - Nombre de sous-marins : 1 ");
+	private JLabel jl_porteav2 = new JLabel("  - Nombre de porte-avions : 1 ");
+	private JLabel jl_croiseur2 = new JLabel("  - Nombre de croiseurs : 1 ");
+	private JLabel jl_destr2 = new JLabel("  - Nombre de destroyers : 1 ");
+	private JLabel jl_ssmarin2 = new JLabel("  - Nombre de sous-marins : 1 ");
+	private JLabel jl_joueur2 = new JLabel("Joueur 2 :");
+	private JLabel jl_placez = new JLabel("Placez vos bateaux :");
+	private JButton[][] jb_case = new JButton[100][100];
+	private JButton[][] jb_case_petit = new JButton[100][100];
+	Bateau bateau_choisi;
+	
 	public void partie(){
 		this.revalidate();
 		this.removeAll();
 		repaint();
+		
+		this.setLayout(new BorderLayout());
+		Font titre = new Font("Arial",Font.BOLD,20);
+		Font ss_titre = new Font("Arial",Font.BOLD,15);
+		JPanel jp_ouest = new JPanel(new GridBagLayout());
+		
+		GridBagConstraints gc_ouest = new GridBagConstraints();
+		gc_ouest.fill = GridBagConstraints.HORIZONTAL;
+		jl_information.setFont(titre);
+		jl_placez.setFont(titre);
+		jl_joueur1.setFont(ss_titre);
+		jl_joueur2.setFont(ss_titre);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 0;
+		gc_ouest.anchor = GridBagConstraints.LINE_START;
+		jp_ouest.add(jl_information,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 1;
+		gc_ouest.insets=new Insets(15, 0, 0, 0);
+		jp_ouest.add(jl_joueur1,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 2;
+		jp_ouest.add(jl_porteav,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 3;
+		jp_ouest.add(jl_croiseur,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 4;
+		jp_ouest.add(jl_destr,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 5;
+		jp_ouest.add(jl_ssmarin,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 6;
+		jp_ouest.add(jl_joueur2,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 7;
+		jp_ouest.add(jl_porteav2,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 8;
+		jp_ouest.add(jl_croiseur2,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 9;
+		jp_ouest.add(jl_destr2,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 10;
+		jp_ouest.add(jl_ssmarin2,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 11;
+		jp_ouest.add(jl_ligne,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 12;
+		jp_ouest.add(jl_placez,gc_ouest);
+		gc_ouest.gridx = 0;
+		gc_ouest.gridy = 13;
+		gc_ouest.insets=new Insets(20, 0, 0, 0);
+		JPanel jp_plateau_bat = new JPanel(new GridBagLayout());
+		GridBagConstraints gc_plateau_bat = new GridBagConstraints();
+		taille_petitplat = tailleplat - 1;
+		for (int i = 0; i < taille_petitplat; i++) {
+			for (int j = 0; j < taille_petitplat; j++) {
+				jb_case_petit[i][j] = new JButton(Integer.toString(i) +" "+ Integer.toString(j));
+				jb_case_petit[i][j].setBackground(bleu);
+				jb_case_petit[i][j].setPreferredSize(new Dimension(40,40));
+				jb_case_petit[i][j].setMinimumSize(new Dimension(20,20));
+				gc_plateau_bat.gridx = i;
+				gc_plateau_bat.gridy = j;
+				jp_plateau_bat.setBackground(new Color(255, 255, 255, 175));
+				jp_plateau_bat.add(jb_case_petit[i][j],gc_plateau_bat);
+				
+				
+				
+			}
+			
+			jp_ouest.setBackground(new Color(255, 255, 255, 175));
+			jp_ouest.add(jp_plateau_bat,gc_ouest);
+			this.add(jp_ouest,BorderLayout.WEST);
+			JPanel jp_plateau = new JPanel(new GridBagLayout());
+			jp_plateau.setBackground(new Color(255, 255, 255, 175));
+			
+			plateau(jp_plateau,1); 
+			this.add(jp_plateau,BorderLayout.CENTER);
+			jp_plateau.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+			jp_ouest.setBorder(BorderFactory.createLoweredSoftBevelBorder()); 
+		}
+		/* ---------------- Fin affichage -----------------*/
+		
+		Plateau p1 = new Plateau(nom_j1, tailleplat, nbbateaux, longueurs);
+		Plateau p2 = new Plateau(nom_j2, tailleplat, nbbateaux, longueurs);
+		placerBateaux(p1);
+		
+		
+		
+		
+		
+	}
+
+	public void PlacerBateaux2(Plateau p){
+		Plateau p2 = new Plateau(null, taille_petitplat, nbbateaux, longueurs);
+		for (int i = 0; i < nbbateaux; i++) {
+			
+		}
+		
+	}
+		public void placerBateaux(Plateau p){
+			//Variables
+			
+			//Placement bateaux premiere table
+			Plateau p1 = new Plateau("placeur bateau", taille_petitplat +1, nbbateaux, longueurs);
+			for (int i = 0; i < nbbateaux; i+=2) {				
+					p1.placerBateau(i, 0, true, p.getBateaux(i));
+			}
+			System.out.println(p1);
+			for (int i = 0; i < taille_petitplat + 1 ; i++) {
+				for (int j = 0; j < taille_petitplat + 1; j++) {
+					if (p1.getCase(i, j).isEstOccupe()) {
+						jb_case_petit[i][j].setBackground(Color.BLACK);
+						
+						
+						jb_case_petit[i][j].setLocation(i, 0);
+						Point pos_bateau = jb_case_petit[i][j].getLocation();
+						 
+						
+						jb_case_petit[i][j].addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								 bateau_choisi = p1.getCase((int)pos_bateau.getX(),(int)pos_bateau.getY()).getEstOccupePar();
+								
+							}
+						});
+					}
+				}
+			}
+			
+			for (int i = 1; i < tailleplat ; i++) {
+				for (int j = 1; j < tailleplat ; j++) {
+					jb_case[i][j].setLocation(i, j);
+					Point position = jb_case[i][j].getLocation();
+					jb_case[i][j].addActionListener(new ActionListener() {
+						
+						public void actionPerformed(ActionEvent e) {
+							
+							if (bateau_choisi != null) {
+								boolean autorisation = true;
+								if (p.getCase((int) position.getX(), (int) position.getY()).isEstOccupe()) {
+									autorisation = false;
+								}
+								if (autorisation) {
+									p.placerBateau((int) position.getX(), (int) position.getY(), true, bateau_choisi);
+									for (int k = 0; k < bateau_choisi.getLongueur(); k++) {
+										jb_case[(int) position.getX()+k][(int) position.getY()].setBackground(Color.BLACK);
+									}
+									
+								} 
+							}
+						}
+					});
+				}
+			
+
+		}	
+		
+
+
+	
+
+
+	/* ---------------------------------------------------METHODE------------------------------------------------------ */
+
+
+		
+	}
+	
+
+
+	/**
+	 * 
+	 */
+	public void plateau(JPanel jp_plateau,int idJoueur) {
+		/* GRIDBAGCONSTRAINT */
+		GridBagConstraints gc_plateau = new GridBagConstraints();
+		
+		for (int i = 0; i < tailleplat; i++) {
+			
+
+			for (int j = 0; j < tailleplat; j++) {
+				
+				jb_case[i][j] = new JButton("");
+				jb_case[i][j].setBackground(bleu);
+				gc_plateau.gridx = i;
+				gc_plateau.gridy = j;
+				jb_case[i][j].setPreferredSize(new Dimension(50, 50));
+				
+				jp_plateau.add(jb_case[i][j],gc_plateau);
+			}
+		}
+	}
+
+
+	
+	
+	/* --------------------------------------------------------------------------------------------------------- */
+	
+	
+
+	/**
+	 * @param i
+	 * @param j
+	 */
+	
+		
+			
+		
+	
+	/**
+	 * @return the jb_case
+	 */
+	public JButton[][] getJb_case() {
+		return jb_case;
+	}
+	/**
+	 * @param jb_case the jb_case to set
+	 */
+	public void setJb_case(JButton[][] jb_case) {
+		this.jb_case = jb_case;
+	}
+	/**
+	 * @return the jb_case_petit
+	 */
+	public JButton[][] getJb_case_petit() {
+		return jb_case_petit;
+	}
+	/**
+	 * @param jb_case_petit the jb_case_petit to set
+	 */
+	public void setJb_case_petit(JButton[][] jb_case_petit) {
+		this.jb_case_petit = jb_case_petit;
 	}
 	
 }
+

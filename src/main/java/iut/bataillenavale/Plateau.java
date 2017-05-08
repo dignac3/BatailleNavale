@@ -22,8 +22,26 @@ public class Plateau {
 		this.nb_bateaux = nb_bateaux;
 		bateaux = new Bateau[nb_bateaux];
 		cases = new Case[cote][cote];
+		String nom_bateau;
 		for (int i = 0; i < nb_bateaux; i++) {
-			bateaux[i] = new Bateau(longueurs[i]);
+			switch (longueurs[i]) {
+			case 2:
+				nom_bateau = "Sous-Marin";
+				break;
+			case 3:
+				nom_bateau = "Destroyer";
+				break;
+			case 4:
+				nom_bateau = "Croiseur";
+				break;
+			case 5:
+				nom_bateau = "Porte-Avion";
+				break;
+			default:
+				nom_bateau = null;
+				break;
+			}
+			bateaux[i] = new Bateau(longueurs[i], nom_bateau);
 		}
 		for (int i = 0; i < cases.length; i++) {
 			for (int j = 0; j < cases.length; j++) {
@@ -32,27 +50,21 @@ public class Plateau {
 		}
 	}
 	
-	public boolean placerBateau(int x, int y, boolean horizontal, Bateau bateau){
-		boolean result = false;
-		if (!cases[x][y].isEstOccupe()) {
+	public void placerBateau(int x, int y, boolean horizontal, Bateau bateau){
+		
 			if (horizontal) {
+				System.out.println(bateau.getLongueur());
 				for (int i = 0; i < bateau.getLongueur(); i++) {
 					cases[x][y+i].setEstOccupePar(bateau);
 					cases[x][y+i].setEstOccupe(true);
 				}
 			}
-			else {
+			/*else {
 				for (int i = 0; i < bateau.getLongueur(); i++) {
 					cases[x+i][y].setEstOccupePar(bateau);
 					cases[x+i][y].setEstOccupe(true);
 				}
-				result = true;
-			}
-		}
-		else {
-			result = false;
-		}
-		return result;
+			}*/
 	}
 	
 	
@@ -121,6 +133,10 @@ public class Plateau {
 	 */
 	public int getCote() {
 		return cote;
+	}
+	
+	public Case getCase(int x,int y){
+		return cases[x][y];
 	}
 	
 	public Case[][] getCases(){

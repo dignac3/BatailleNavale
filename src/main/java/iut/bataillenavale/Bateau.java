@@ -13,8 +13,8 @@ public class Bateau {
 	private boolean estCoule;
 	private int vie ;
 	
-	public Bateau(int longueur){
-		this.longueur=longueur;
+	public Bateau(int longueur, String nom){
+		this.longueur=longueur ;
 		this.setVie(longueur);
 		setEstCoule(false);
 		this.setNom("");
